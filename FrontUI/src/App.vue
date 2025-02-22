@@ -116,7 +116,7 @@ input {
   border-radius: 4px;
 }
 
-button {
+button[type="submit"] {
   padding: 0.5rem 1rem;
   background-color: #4CAF50;
   color: white;
@@ -125,12 +125,12 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
+button[type="submit"]:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
+button[type="submit"]:hover:not(:disabled) {
   background-color: #45a049;
 }
 
@@ -161,7 +161,7 @@ header {
   }
 }
 
-.history-link {
+a.history-link {
   color: #666;
   text-decoration: underline;
   cursor: pointer;
@@ -169,10 +169,12 @@ header {
   padding: 2rem 0;
   font-size: 0.9em;
   align-self: flex-start;
+  background: none;
 }
 
-.history-link:hover {
+a.history-link:hover {
   color: #333;
+  background: none;
 }
 
 .history-list {
