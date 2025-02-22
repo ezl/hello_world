@@ -1,12 +1,38 @@
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      name: 'World',
+      inputValue: ''
+    }
+  },
+  methods: {
+    updateName() {
+      this.name = this.inputValue
+      this.inputValue = ''  // Clear the input after update
+    }
+  }
 }
 </script>
 
 <template>
   <div class="container">
-    <h1>Hello, World.</h1>
+    <h1>Hello, {{ name }}.</h1>
+    <div class="input-group">
+      <input 
+        v-model="inputValue"
+        type="text"
+        placeholder="Enter a name"
+        required
+      >
+      <button 
+        @click="updateName"
+        :disabled="!inputValue"
+      >
+        Update
+      </button>
+    </div>
   </div>
 </template>
 
@@ -14,8 +40,39 @@ export default {
 .container {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 1rem;
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
 }
 
 header {
