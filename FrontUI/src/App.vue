@@ -5,12 +5,19 @@ export default {
 </script>
 
 <template>
-  <div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+  <div class="container">
     <h1>Hello, World.</h1>
   </div>
 </template>
 
 <style scoped>
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 header {
   line-height: 1.5;
 }
