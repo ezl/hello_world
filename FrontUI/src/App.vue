@@ -45,13 +45,15 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
+  padding: 0 2rem;
 }
 
 .input-group {
   display: flex;
   gap: 1rem;
+  min-width: 300px;
 }
 
 input {
