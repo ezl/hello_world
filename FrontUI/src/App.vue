@@ -221,6 +221,8 @@ a.history-link:hover {
   max-width: 500px;
   max-height: 80vh;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
@@ -229,6 +231,7 @@ a.history-link:hover {
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid #eee;
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -252,7 +255,8 @@ a.history-link:hover {
 .modal-content {
   padding: 1rem;
   overflow-y: auto;
-  max-height: calc(80vh - 4rem);
+  flex: 1;
+  min-height: 0;
 }
 
 .history-item {
