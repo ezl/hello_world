@@ -7,26 +7,26 @@ export default {
       inputValue: '',
       storageKey: 'name-history',
       showHistory: false,
-      history: []
+      history: [],
     }
   },
   methods: {
     updateName(e) {
-      e.preventDefault()  // Prevent form from actually submitting
+      e.preventDefault() // Prevent form from actually submitting
       const trimmedValue = this.inputValue.trim()
       if (trimmedValue) {
         this.name = trimmedValue
         this.inputValue = ''
-        
+
         // Save to history in localStorage
         const newEntry = {
           value: trimmedValue,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }
-        
+
         // Get existing history or initialize empty array
         const history = JSON.parse(localStorage.getItem(this.storageKey) || '[]')
-        
+
         // Add new entry and save back to localStorage
         history.push(newEntry)
         localStorage.setItem(this.storageKey, JSON.stringify(history))
@@ -41,33 +41,21 @@ export default {
       } else {
         document.body.style.overflow = 'auto'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <template>
-  <div class="page" :class="{ 'blur': showHistory }">
+  <div class="page" :class="{ blur: showHistory }">
     <div class="container">
       <h1>Hello, {{ name }}.</h1>
       <form class="input-group" @submit="updateName">
-        <input 
-          v-model="inputValue"
-          type="text"
-          placeholder="Enter a name"
-          required
-        >
-        <button 
-          type="submit"
-          :disabled="!inputValue"
-        >
-          Update
-        </button>
+        <input v-model="inputValue" type="text" placeholder="Enter a name" required />
+        <button type="submit" :disabled="!inputValue">Update</button>
       </form>
     </div>
-    <a href="#" @click.prevent="toggleHistory" class="history-link">
-      show history
-    </a>
+    <a href="#" @click.prevent="toggleHistory" class="history-link"> show history </a>
   </div>
 
   <!-- Modal -->
@@ -116,21 +104,21 @@ input {
   border-radius: 4px;
 }
 
-button[type="submit"] {
+button[type='submit'] {
   padding: 0.5rem 1rem;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-button[type="submit"]:disabled {
+button[type='submit']:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-button[type="submit"]:hover:not(:disabled) {
+button[type='submit']:hover:not(:disabled) {
   background-color: #45a049;
 }
 
