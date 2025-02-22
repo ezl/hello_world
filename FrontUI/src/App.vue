@@ -10,8 +10,9 @@ export default {
   methods: {
     updateName(e) {
       e.preventDefault()  // Prevent form from actually submitting
-      if (this.inputValue) {
-        this.name = this.inputValue
+      const trimmedValue = this.inputValue.trim()
+      if (trimmedValue) {
+        this.name = trimmedValue
         this.inputValue = ''
       }
     }
