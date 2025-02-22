@@ -8,9 +8,12 @@ export default {
     }
   },
   methods: {
-    updateName() {
-      this.name = this.inputValue
-      this.inputValue = ''  // Clear the input after update
+    updateName(e) {
+      e.preventDefault()  // Prevent form from actually submitting
+      if (this.inputValue) {
+        this.name = this.inputValue
+        this.inputValue = ''
+      }
     }
   }
 }
@@ -19,7 +22,7 @@ export default {
 <template>
   <div class="container">
     <h1>Hello, {{ name }}.</h1>
-    <div class="input-group">
+    <form class="input-group" @submit="updateName">
       <input 
         v-model="inputValue"
         type="text"
@@ -27,12 +30,12 @@ export default {
         required
       >
       <button 
-        @click="updateName"
+        type="submit"
         :disabled="!inputValue"
       >
         Update
       </button>
-    </div>
+    </form>
   </div>
 </template>
 
