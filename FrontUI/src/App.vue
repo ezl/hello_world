@@ -1,17 +1,24 @@
 <script>
+import { ref, onMounted } from 'vue'
+import { createName, getNames } from './api'
+
 export default {
   name: 'App',
   data() {
     return {
-      name: 'World',
+      name: '',
       inputValue: '',
       storageKey: 'name-history',
       showHistory: false,
       history: [],
+      namesList: ref([]),
+      isSubmitting: ref(false),
+      errorMessage: ref(''),
     }
   },
   methods: {
     updateName(e) {
+      console.log("update name")
       e.preventDefault() // Prevent form from actually submitting
       const trimmedValue = this.inputValue.trim()
       if (trimmedValue) {
@@ -42,6 +49,45 @@ export default {
         document.body.style.overflow = 'auto'
       }
     },
+
+    async handleSubmit(e) {
+      console.log("handleSubmit")
+      e.preventDefault()
+      this.isSubmitting = true
+      this.errorMessage = '' // Reset error message
+
+      const localTimestamp = new Date().toISOString() // Create a local timestamp
+
+      try {
+        if (this.name) {
+          console.log("try createname")
+          const response = await createName(this.name)
+          // If successful, append to localStorage
+          localStorage.setItem(
+            `name-${response.id}`,
+            JSON.stringify({ name: response.name, createdAt: response.createdAt }),
+          )
+          this.fetchNames()
+        }
+      } catch (error) {
+        this.errorMessage = 'Error adding name. Saving locally...'
+        // Save to localStorage if there's an error
+        localStorage.setItem(
+          `name-local-${localTimestamp}`,
+          JSON.stringify({ name: this.name, createdAt: localTimestamp }),
+        )
+      } finally {
+        this.isSubmitting = false // Reset submitting state
+        this.name = '' // Clear input field
+      }
+    },
+
+    async fetchNames() {
+      this.namesList = await getNames()
+    },
+  },
+  mounted() {
+    this.fetchNames()
   },
 }
 </script>
@@ -50,10 +96,16 @@ export default {
   <div class="page" :class="{ blur: showHistory }">
     <div class="container">
       <h1>Hello, {{ name }}.</h1>
-      <form class="input-group" @submit="updateName">
-        <input v-model="inputValue" type="text" placeholder="Enter a name" required />
-        <button type="submit" :disabled="!inputValue">Update</button>
+      <form class="input-group" @submit="handleSubmit">
+        <input v-model="name" type="text" placeholder="Enter a name" required />
+        <button type="submit" :disabled="isSubmitting || !name">
+          <span v-if="isSubmitting">
+            <i class="fa fa-spinner fa-spin"></i>
+          </span>
+          <span v-else>Update</span>
+        </button>
       </form>
+      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </div>
     <a href="#" @click.prevent="toggleHistory" class="history-link"> show history </a>
   </div>
