@@ -62,9 +62,9 @@ export default {
       const localTimestamp = new Date().toISOString() // Create a local timestamp
 
       try {
-        if (this.name) {
+        if (this.inputValue) {
           console.log("try createname")
-          const response = await createName(this.name)
+          const response = await createName(this.inputValue)
           // If successful, append to localStorage
           const newEntry = {
             value: response.name,
@@ -81,11 +81,11 @@ export default {
         // Save to localStorage if there's an error
         localStorage.setItem(
           `name-local-${localTimestamp}`,
-          JSON.stringify({ name: this.name, createdAt: localTimestamp }),
+          JSON.stringify({ name: this.inputValue, createdAt: localTimestamp }),
         )
       } finally {
         this.isSubmitting = false // Reset submitting state
-        this.name = '' // Clear input field
+        this.inputValue = '' // Clear input field
       }
     },
 
@@ -135,12 +135,12 @@ export default {
     <div class="container">
       <h1>Hello, {{ name }}.</h1>
       <form class="input-group" @submit="handleSubmit">
-        <input v-model="name" type="text" placeholder="Enter a name" required />
-        <button type="submit" :disabled="isSubmitting || !name">
+        <input v-model="inputValue" type="text" placeholder="Enter a name" required />
+        <button type="submit" :disabled="isSubmitting || !inputValue">
           <span v-if="isSubmitting">
             <i class="fa fa-spinner fa-spin"></i>
           </span>
-          <span v-else>Update</span>
+          <span v-else>Add Name</span>
         </button>
       </form>
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
