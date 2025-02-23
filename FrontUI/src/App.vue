@@ -43,7 +43,10 @@ export default {
     toggleHistory() {
       this.showHistory = !this.showHistory
       if (this.showHistory) {
+        // Get existing history and limit to the last 10 entries
         this.history = JSON.parse(localStorage.getItem(this.storageKey) || '[]')
+          .slice(-10) // Get the last 10 entries
+          .reverse() // Reverse to show in chronological order
         document.body.style.overflow = 'hidden' // Prevent scrolling when modal is open
       } else {
         document.body.style.overflow = 'auto'
@@ -63,9 +66,13 @@ export default {
           console.log("try createname")
           const response = await createName(this.name)
           // If successful, append to localStorage
+          const newEntry = {
+            value: response.name,
+            timestamp: response.createdAt,
+          }
           localStorage.setItem(
             `name-${response.id}`,
-            JSON.stringify({ name: response.name, createdAt: response.createdAt }),
+            JSON.stringify(newEntry),
           )
           this.fetchNames()
         }
@@ -83,11 +90,36 @@ export default {
     },
 
     async fetchNames() {
-      this.namesList = await getNames()
+      const remoteNames = await getNames();
+      this.namesList = remoteNames;
+
+      // Update localStorage with remote names
+      const history = remoteNames.map(name => ({
+        value: name.name,
+        timestamp: name.createdAt,
+      }));
+      localStorage.setItem(this.storageKey, JSON.stringify(history));
+    },
+
+    async syncLocalToRemote() {
+      const localHistory = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+      for (const entry of localHistory) {
+        // Check if the entry already exists in the remote database
+        const exists = this.namesList.some(name => name.name === entry.value);
+        if (!exists) {
+          // Attempt to create the name in the remote database
+          try {
+            await createName(entry.value);
+          } catch (error) {
+            console.error('Failed to sync local entry:', entry.value);
+          }
+        }
+      }
     },
   },
   mounted() {
     this.fetchNames()
+    this.syncLocalToRemote()
   },
 }
 </script>
