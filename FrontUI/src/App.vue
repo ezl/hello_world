@@ -120,6 +120,12 @@ export default {
   mounted() {
     this.fetchNames()
     this.syncLocalToRemote()
+
+    // Load the last name from localStorage if it exists
+    const lastNameEntry = JSON.parse(localStorage.getItem(this.storageKey) || '[]').pop();
+    if (lastNameEntry) {
+      this.name = lastNameEntry.value; // Set the last name as the current name
+    }
   },
 }
 </script>
