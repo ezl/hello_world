@@ -116,6 +116,30 @@ export default {
         }
       }
     },
+
+    clearLocalHistory() {
+      localStorage.removeItem(this.storageKey); // Clear local history
+      this.history = []; // Clear the history array in the component
+    },
+
+    async clearRemoteHistory() {
+      // Assuming you have an endpoint to delete all names
+      try {
+        await fetch('http://localhost:5001/api/names', {
+          method: 'DELETE', // Use the appropriate method for your API
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        console.error('Failed to clear remote history:', error);
+      }
+    },
+
+    async clearHistory() {
+      this.clearLocalHistory(); // Clear local history
+      await this.clearRemoteHistory(); // Clear remote history
+    },
   },
   mounted() {
     this.fetchNames()
