@@ -150,6 +150,9 @@ export default {
     if (lastNameEntry) {
       this.name = lastNameEntry.value; // Set the last name as the current name
     }
+
+    // Set the page title
+    document.title = "Hello, World.";
   },
 }
 </script>
@@ -157,7 +160,7 @@ export default {
 <template>
   <div class="page" :class="{ blur: showHistory }">
     <div class="container">
-      <h1>Hello, {{ name }}.</h1>
+      <h1>Hello, {{ name || 'World' }}.</h1>
       <form class="input-group" @submit="handleSubmit">
         <input v-model="inputValue" type="text" placeholder="Enter a name" required />
         <button type="submit" :disabled="isSubmitting || !inputValue">
@@ -184,6 +187,9 @@ export default {
           <span>{{ entry.value }}</span>
           <span class="timestamp">{{ new Date(entry.timestamp).toLocaleString() }}</span>
         </div>
+        <div class="modal-footer">
+          <button @click="clearHistory" class="clear-history-button">Clear History</button>
+        </div> 
       </div>
     </div>
   </div>
@@ -371,5 +377,19 @@ a.history-link:hover {
 .timestamp {
   color: #666;
   font-size: 0.9em;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.clear-history-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
 }
 </style>
