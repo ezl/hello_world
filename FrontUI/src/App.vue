@@ -387,9 +387,16 @@ a.history-link:hover {
 }
 
 .clear-history-button {
-  background: none;
+  background: red; /* Updated background color */
+  color: white; /* Updated text color */
   border: none;
   cursor: pointer;
   margin-left: 10px;
+  padding: 0.5rem 1rem; /* Optional: Add some padding for better appearance */
+  border-radius: 4px; /* Optional: Add border radius for rounded corners */
+}
+
+.clear-history-button:hover {
+  background: darkred; /* Optional: Change background on hover */
 }
 </style>
