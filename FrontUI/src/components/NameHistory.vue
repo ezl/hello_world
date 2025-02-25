@@ -6,6 +6,9 @@
         <button class="close-button" @click="close">&times;</button>
       </div>
       <div class="modal-content">
+        <div v-if="history.length === 0" class="empty-message">
+          <p>No name history available.</p>
+        </div>
         <div v-for="(entry, index) in history" :key="index" class="history-item">
           <span>{{ entry.value }}</span>
           <span class="timestamp">{{ new Date(entry.timestamp).toLocaleString() }}</span>
@@ -120,16 +123,22 @@ export default {
 }
 
 .clear-history-button {
-  background: red; /* Updated background color */
-  color: white; /* Updated text color */
+  background: red;
+  color: white;
   border: none;
   cursor: pointer;
   margin-left: 10px;
-  padding: 0.5rem 1rem; /* Optional: Add some padding for better appearance */
-  border-radius: 4px; /* Optional: Add border radius for rounded corners */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
 }
 
 .clear-history-button:hover {
-  background: darkred; /* Optional: Change background on hover */
+  background: darkred;
+}
+
+.empty-message {
+  text-align: center;
+  color: #666;
+  padding: 1rem;
 }
 </style> 
