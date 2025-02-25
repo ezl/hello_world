@@ -32,6 +32,7 @@ export default {
           const response = await createName(trimmedValue);
           this.updateLocalStorage(response);
           this.fetchNames();
+          this.loadHistory();
         } catch (error) {
           this.errorMessage = 'Error adding name. Saving locally...';
           this.saveLocally(localTimestamp);
@@ -66,6 +67,7 @@ export default {
       this.history = JSON.parse(localStorage.getItem(this.storageKey) || '[]').slice(-10).reverse();
     },
     async fetchNames() {
+      console.log('fetchNames')
       const remoteNames = await getNames();
       const history = remoteNames.map(name => ({ value: name.name, timestamp: name.createdAt }));
       localStorage.setItem(this.storageKey, JSON.stringify(history));
@@ -101,6 +103,7 @@ export default {
   },
   mounted() {
     this.fetchNames();
+    this.loadHistory();
     this.syncLocalToRemote();
     const lastNameEntry = JSON.parse(localStorage.getItem(this.storageKey) || '[]').pop();
     if (lastNameEntry) this.name = lastNameEntry.value;
