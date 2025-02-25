@@ -1,7 +1,7 @@
 <template>
   <form class="input-group" @submit.prevent="submitName">
     <input v-model="inputValue" type="text" placeholder="Enter a name" required />
-    <button type="submit" :disabled="isSubmitting">
+    <button type="submit" :disabled="isSubmitting || inputValue.trim() === ''">
       <span v-if="isSubmitting">
         <i class="fa fa-spinner fa-spin"></i>
       </span>
