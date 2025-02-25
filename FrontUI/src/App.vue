@@ -60,7 +60,8 @@ export default {
       this.errorMessage = '' // Reset error message
 
       const localTimestamp = new Date().toISOString() // Create a local timestamp
-
+      this.name = this.inputValue
+      
       try {
         if (this.inputValue) {
           console.log("try createname")
@@ -87,6 +88,7 @@ export default {
         this.isSubmitting = false // Reset submitting state
         this.inputValue = '' // Clear input field
       }
+      
     },
 
     async fetchNames() {
