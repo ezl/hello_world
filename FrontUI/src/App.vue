@@ -20,34 +20,29 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      console.log('handleSubmit called');
       this.isSubmitting = true
       this.errorMessage = ''
       const trimmedValue = this.inputValue.trim();
 
       if (trimmedValue) {
         this.name = trimmedValue;
-        const localTimestamp = new Date().toISOString();
-
         try {
           const response = await createName(trimmedValue);
-          this.updateLocalStorage(response);
-          this.fetchNames();
-          this.loadHistory();
         } catch (error) {
           this.errorMessage = 'Error adding name. Saving locally...';
           this.saveLocally(localTimestamp);
         } finally {
+          this.fetchNames();
           this.resetForm();
         }
       } else {
         this.isSubmitting = false;
       }
     },
-    updateLocalStorage(response) {
-      const newEntry = { value: response.name, timestamp: response.createdAt };
-      localStorage.setItem(`name-${response.id}`, JSON.stringify(newEntry));
-    },
     saveLocally(localTimestamp) {
+      // only called if remote write fails
+      console.log('saveLocally called');
       localStorage.setItem(`name-local-${localTimestamp}`, JSON.stringify({ name: this.inputValue, createdAt: localTimestamp }));
     },
     resetForm() {
@@ -55,39 +50,45 @@ export default {
       this.inputValue = '';
     },
     toggleHistory() {
+      console.log('toggleHistory called');
       this.showHistory = !this.showHistory;
       if (this.showHistory) {
-        this.loadHistory();
         document.body.style.overflow = 'hidden';
+        // why are we toggling overflow hidden to auto here?
       } else {
         document.body.style.overflow = 'auto';
       }
     },
-    loadHistory() {
-      this.history = JSON.parse(localStorage.getItem(this.storageKey) || '[]').slice(-10).reverse();
-    },
+
     async fetchNames() {
-      console.log('fetchNames')
+      console.log('fetchNames called');
       const remoteNames = await getNames();
       const history = remoteNames.map(name => ({ value: name.name, timestamp: name.createdAt }));
       localStorage.setItem(this.storageKey, JSON.stringify(history));
+      this.history = history;
+      // this.history = JSON.parse(localStorage.getItem(this.storageKey) || '[]').slice(-10).reverse();
     },
     async clearHistory() {
+      console.log('clearHistory called');
       this.clearLocalHistory();
       await this.clearRemoteHistory();
     },
     clearLocalHistory() {
+      console.log('clearLocalHistory called');
       localStorage.removeItem(this.storageKey);
       this.history = [];
     },
     async clearRemoteHistory() {
+      console.log('clearRemoteHistory called');
       try {
+        // TODO:move this to api.js
         await fetch('http://localhost:5001/api/names', { method: 'DELETE', headers: { 'Content-Type': 'application/json' } });
       } catch (error) {
         console.error('Failed to clear remote history:', error);
       }
     },
     async syncLocalToRemote() {
+      console.log('syncLocalToRemote called');
       const localHistory = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
       for (const entry of localHistory) {
         const exists = this.history.some(name => name.value === entry.value);
@@ -102,8 +103,8 @@ export default {
     },
   },
   mounted() {
+    console.log('mounted called');
     this.fetchNames();
-    this.loadHistory();
     this.syncLocalToRemote();
     const lastNameEntry = JSON.parse(localStorage.getItem(this.storageKey) || '[]').pop();
     if (lastNameEntry) this.name = lastNameEntry.value;
