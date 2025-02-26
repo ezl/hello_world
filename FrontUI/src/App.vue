@@ -119,7 +119,7 @@ export default {
       <NameForm @submit="handleSubmit" v-model="inputValue" :isSubmitting="isSubmitting" />
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </div>
-    <a href="#" @click.prevent="toggleHistory" class="history-link"> show history </a>
+    <a href="#" @click.prevent="toggleHistory" class="history-link"> show history ({{ history.length }})</a>
     <NameHistory v-if="showHistory" :history="history" :show="showHistory" @close="toggleHistory" @clear-history="clearHistory" />
   </div>
 </template>
