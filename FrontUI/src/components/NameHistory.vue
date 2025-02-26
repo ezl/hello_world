@@ -59,7 +59,8 @@ export default {
 }
 
 .modal {
-  background: white;
+  background: #2c2c2c;
+  color: white;
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
@@ -81,6 +82,7 @@ export default {
 .modal-header h2 {
   margin: 0;
   font-size: 1.5rem;
+  color: #ffffff;
 }
 
 .close-button {
@@ -108,10 +110,11 @@ export default {
   justify-content: space-between;
   padding: 0.5rem 0;
   border-bottom: 1px solid #eee;
+  color: #e0e0e0;
 }
 
 .timestamp {
-  color: #666;
+  color: #b0b0b0;
   font-size: 0.9em;
 }
 
@@ -138,7 +141,7 @@ export default {
 
 .empty-message {
   text-align: center;
-  color: #666;
+  color: #b0b0b0;
   padding: 1rem;
 }
 </style> 
